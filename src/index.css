@@ -1,3 +1,6 @@
-body {
-  background-color: #ddd;
-}
+section.section_wrapper {
+   display: inline-block;
+   vertical-align: top;
+   width:49%;
+   height:100%;
+ }
