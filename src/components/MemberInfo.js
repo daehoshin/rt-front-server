@@ -1,11 +1,51 @@
 import React, { Component } from 'react';
+import axios from 'axios';
 
 class MemberInfo extends Component {
+    constructor(props){
+        super(props);
+        this.state = {
+            subject: {title: '네이버 가입현황'},
+            members: []
+        }
+    }
+
+    componentWillMount (){
+        axios({
+            method: 'post',
+            url: 'http://localhost:6611/account/memberList',
+            data: '{"data":""}',
+            headers: {'Content-Type': 'application/json' }
+        }).then(function (response) {
+           this.setState({members:response.data.data});
+        }.bind(this)).catch(function(){
+
+        });
+    }
+
   render() {
+
+    var lists = [];
+    var data = this.state.members;
+
+    let i = 0;
+    while(i<data.length) {
+      lists.push(
+        <tr key={i+1}>
+          <td>{i+1}</td>
+          <td>{data[i].memberId}</td>
+          <td>{data[i].memberName}</td>
+          <td>{data[i].memberBirthYear+data[i].memberBirthMonth+data[i].memberBirthDay}</td>
+          <td>{data[i].memberGender}</td>
+          <td>{data[i].memberMobile}</td>
+        </tr>
+      )
+      i = i+1;
+    }
     return (
         <div id="member_info" className="section_wrapper">
           <div className="subject_wrap">
-            <h1>네이버 가입현황</h1>
+            <h1>{this.state.subject.title}</h1>
           </div>
           <div className="list_wrap">
             <div className="info_row">
@@ -19,24 +59,17 @@ class MemberInfo extends Component {
                   <col width="15%"/>
                 </colgroup>
                 <thead>
-                  <tr>
-                    <th>번호</th>
-                    <th>아이디</th>
-                    <th>이름</th>
-                    <th>생년월일</th>
-                    <th>성별</th>
-                    <th>휴대전화</th>
-                  </tr>
+                <tr>
+                  <th>번호</th>
+                  <th>아이디</th>
+                  <th>이름</th>
+                  <th>생년월일</th>
+                  <th>성별</th>
+                  <th>휴대전화</th>
+                </tr>
                 </thead>
                 <tbody>
-                <tr>
-                  <td>1</td>
-                  <td>daehoshin87@naver.com</td>
-                  <td>신대호</td>
-                  <td>1987.02.07</td>
-                  <td>남자</td>
-                  <td>01025436611</td>
-                </tr>
+                  {lists}
                 </tbody>
               </table>
             </div>
